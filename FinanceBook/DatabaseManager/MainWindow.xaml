@@ -1,0 +1,78 @@
+﻿<Window x:Class="DatabaseManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:DatabaseManager.ViewModel"
+        Title="FinanceBook" Height="600" Width="1000">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0" Margin="5" Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock Text="Таблица:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <ComboBox ItemsSource="{Binding TableNames}" 
+            SelectedItem="{Binding SelectedTableName}" 
+            Width="200" Margin="5"/>
+            <TextBlock Text="Метод амортизации:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+            <ComboBox ItemsSource="{Binding DepreciationMethods}" 
+            SelectedItem="{Binding SelectedDepreciationMethod}" 
+            Width="150" Margin="5"/>
+            <Button Content="Рассчитать амортизацию" 
+            Command="{Binding CalculateDepreciationCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Зарегистрировать проводку" 
+            Command="{Binding RegisterTransactionCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Оборотно-сальдовая ведомость" 
+            Command="{Binding GenerateTrialBalanceCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Деб./Кред. задолженность" 
+            Command="{Binding CalculateReceivablesPayablesCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Инвентаризация" 
+            Command="{Binding PerformInventoryCheckCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Начислить зарплату" 
+            Command="{Binding CalculateSalaryCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Бухгалтерский баланс" 
+            Command="{Binding GenerateBalanceSheetCommand}" 
+            Padding="10,5" Margin="5"/>
+            <Button Content="Рассчитать НДС" 
+            Command="{Binding CalculateVATCommand}" 
+            Padding="10,5" Margin="5"/>
+        </WrapPanel>
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding Items}" 
+                  AutoGenerateColumns="True" 
+                  CanUserAddRows="False" 
+                  IsReadOnly="True" 
+                  Margin="5"/>
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" 
+                       VerticalAlignment="Center" 
+                       Text="{Binding SelectedTableName, StringFormat=Таблица: {0}}"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Экспорт в JSON" 
+                        Command="{Binding ExportCommand}" 
+                        Padding="10,5" Margin="5,0"/>
+                <Button Content="Импорт из JSON" 
+                        Command="{Binding ImportCommand}" 
+                        Padding="10,5" Margin="5,0"/>
+                <ProgressBar Width="100" 
+                             Height="20" 
+                             Margin="10,0" 
+                             Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                             IsIndeterminate="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
